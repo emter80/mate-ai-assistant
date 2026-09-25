@@ -13,7 +13,7 @@ DISPLAY_NAME = "Mariusz"
 CV_PATH = "cv.md"
 MAX_TOKENS = int(os.getenv("MAX_TOKENS", "300"))
 MAX_MESSAGE_CHARS = int(os.getenv("MAX_MESSAGE_CHARS", "4000"))
-MAX_RESPONSE_CHARS = int(os.getenv("MAX_RESPONSE_CHARS", "1500"))
+MAX_RESPONSE_CHARS = int(os.getenv("MAX_RESPONSE_CHARS", "0"))
 MAX_TRANSCRIPT_CHARS = int(os.getenv("MAX_TRANSCRIPT_CHARS", "12000"))
 
 
@@ -107,7 +107,9 @@ def get_agent_reply(message, history):
         run_time = time.perf_counter() - start_run
         print(f"[perf] agent run: {run_time:.3f}s")
         answer = result.final_output or ""
-        return answer[:MAX_RESPONSE_CHARS]
+        if MAX_RESPONSE_CHARS > 0:
+            answer = answer[:MAX_RESPONSE_CHARS]
+        return answer
     except Exception as e:
         return f"A technical error occurred while communicating with the model: {str(e)}. Please try again in a moment!"
 
